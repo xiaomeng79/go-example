@@ -1,0 +1,21 @@
+#默认配置文件
+log:
+    path:     tmp
+    isstdout:     yes
+    maxage:     7
+
+mysql:
+    dbname:     test
+    addr:     127.0.0.1
+    user:     test
+    password: test
+    port:     3306
+    idleconn:     5
+    maxconn:     20
+
+mongo:
+    Hosts:     127.0.0.1:27017
+    dbname:     test
+    user:       master
+    password:   123456
+    poollimit: 1000

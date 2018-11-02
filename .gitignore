@@ -6,3 +6,5 @@
 */*.svg
 .idea
 coverage.txt
+tmp
+bin
