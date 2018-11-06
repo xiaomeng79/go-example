@@ -2,7 +2,9 @@
 
 package main
 
-import "github.com/xiaomeng79/go-example/user/api"
+import (
+	"github.com/xiaomeng79/go-example/user/api"
+)
 
 func main() {
 	api.Run()

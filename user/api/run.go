@@ -60,7 +60,13 @@ func Run() {
 	//新建一个句柄
 	service.Server().Handle(
 		service.Server().NewHandler(
-			&UserHandler{Client: pb.NewUserService("com.example.srv.user", service.Client())},
+			&User{Client: pb.NewUserService("com.example.srv.user", service.Client())},//默认的客户端参数
+			//设置客户端参数
+			//&User{Client: pb.NewUserService("com.example.srv.user", client.NewClient(
+			//	client.Retries(2),//重试次数
+			//	client.WrapCall(ot.NewCallWrapper(opentracing.GlobalTracer())),//客户端包装
+			//	client.DialTimeout(time.Second*30),//客户端延迟断开
+			//	))},
 		),
 	)
 	//启动service

@@ -1,0 +1,29 @@
+consul:
+  command: -server -bootstrap -rejoin
+  image: progrium/consul:latest
+  ports:
+  - "8300:8300"
+  - "8400:8400"
+  - "8500:8500"
+  - "8600:53/udp"
+micro:
+  command: --registry_address=consul:8500 api --namespace=com.example.api
+  image: microhq/micro:latest
+  links:
+  - consul
+  - user_api
+  ports:
+  - "8080:8080"
+user_api:
+  build: ./bin/user_api
+  command: --registry_address=consul:8500
+  links:
+  - consul
+  - user_srv
+user_srv:
+  build: ./bin/user_srv
+  command: --registry_address=consul:8500
+  links:
+  - consul
+
+

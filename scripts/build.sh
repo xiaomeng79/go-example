@@ -5,8 +5,8 @@ set -e
 #build
 build() {
     #判断bin是否存在
-    if [ ! -d bin ];then
-    mkdir bin
+    if [ ! -d deployments/bin ];then
+    mkdir deployments/bin
     fi
     #build
 
@@ -14,7 +14,8 @@ build() {
     if [ -d $dirname ];then
 		for f in $dirname/$2.go; do \
 		    if [ -f $f ];then \
-		        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -i -o bin/$1_$2 -tags $1_$2 .
+		        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -i -o deployments/bin/$1_$2/$1_$2 -tags $1_$2 ./cmd/$1/
+		        cp scripts/run.sh deployments/bin/$1_$2
                 echo build over: $1_$2; \
             fi \
 		done \

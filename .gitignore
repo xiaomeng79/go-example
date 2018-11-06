@@ -8,3 +8,5 @@
 coverage.txt
 tmp
 bin
+*/tmp
+deployments/bin

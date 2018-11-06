@@ -39,8 +39,6 @@ allbuild :
 
 #生成pb文件
 
-#生成pb文件
-
 .PHONY : proto
 proto :
 
@@ -52,12 +50,24 @@ proto :
 .PHONY : dockerfile
 dockerfile :
 
-	@echo "开始生成dockerfile"
-	@echo "FROM alpine:3.2" >$(docker_file_name)
-	@echo "RUN set -xe && apk add --no-cache tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime" >>$(docker_file_name)
-	@echo "ADD $(project_name) /$(project_name)" >>$(docker_file_name)
-	@echo "ENTRYPOINT [ "/$(project_name)" ] " >>$(docker_file_name)
-	@echo "生成Dockerfile"
+	@echo "部分生成dockerfile开始"
+	@chmod +x ./scripts/dockerfile.sh && ./scripts/dockerfile.sh df $(project) $(type)
+	@echo "部分生成Dockerfile结束"
+
+
+.PHONY : alldockerfile
+alldockerfile :
+
+	@echo "全部生成dockerfile开始"
+	@chmod +x ./scripts/dockerfile.sh && ./scripts/dockerfile.sh alldf
+	@echo "全部生成Dockerfile结束"
+
+
+#compose命令 bin:up stop restart kill rm ps
+.PHONY : compose
+compose :
+
+	@chmod +x ./scripts/docker-compose.sh && ./scripts/docker-compose.sh $(bin)
 
 #编辑k8s配置
 .PHONY : k8sconfig
