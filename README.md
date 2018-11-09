@@ -19,8 +19,29 @@
 |打包|[bindata](https://github.com/jteeuwen/go-bindata)|
 |编码|[protoc-gen-micro](https://github.com/micro/protoc-gen-micro)|
 |部署|docker docker-compose k8s|
+|文档生成|swagger|
 |其他|JWT|
 
+## 目录结构
+
+```go
+.
+├── api //restful接口
+├── cinit //公共配置和初始化
+├── cmd //服务入口
+├── data //测试数据
+├── deployments //部署目录,docker docker-compose k8s配置文件,自动化生成
+├── go.mod //go1.11包管理
+├── go.sum
+├── internal //内部公共组件
+├── LICENSE
+├── Makefile 
+├── README.md
+├── scripts //makefile使用的脚本
+├── srv //服务目录
+└── third_party //第三方包目录
+
+```
 ## 依赖安装
 
 -  安装 protoc protoc-gen-micro  protoc-gen-go 
@@ -38,7 +59,7 @@
 ```go
 make allbuild
 ```
-## 本地运行
+## 本地docker-compose运行
 
 ```go
 make compose

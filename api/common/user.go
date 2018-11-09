@@ -52,7 +52,7 @@ func login(c echo.Context) error {
 		return RpcErr(c, err)
 	}
 	//通过验证,设置JWT
-	s, err := jwt.Encode(jwt.JWTMsg{_rsp.Id, _rsp.Username})
+	s, err := jwt.Encode(jwt.JWTMsg{UserId:_rsp.Id, UserName:_rsp.Username})
 	if err != nil {
 		log.Error(err.Error(), ctx)
 		return HandleError(c, ServiceError, err.Error())
