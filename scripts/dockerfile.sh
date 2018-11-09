@@ -17,20 +17,18 @@ cat>$filename/Dockerfile<<EOF
 FROM alpine:3.2
 RUN set -xe && apk add --no-cache tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ADD $pname /$pname
-ADD run.sh /run.sh
-RUN chmod +x /run.sh /$pname
-ENTRYPOINT [ "sh","/run.sh","/$pname" ]
+RUN chmod +x /$pname
+ENTRYPOINT [ "/$pname" ]
 EOF
 echo "生成dockerfile$pname"
 }
 
 #全部生成dockerfile
 allgen() {
-    gen user api
-    gen user srv
-    gen account api
-    gen account srv
-    gen auth srv
+    gen api common
+    gen srv user
+    gen srv account
+    gen srv auth
 }
 
 #判断如何build

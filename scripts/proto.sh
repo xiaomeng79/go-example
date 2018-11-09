@@ -2,7 +2,7 @@
 
 
 proto() {
-    dirname=./$1/srv/proto
+    dirname=./srv/$1/proto
     if [ -d $dirname ];then
 		for f in $dirname/*.proto; do \
 		    if [ -f $f ];then \

@@ -6,24 +6,43 @@ consul:
   - "8400:8400"
   - "8500:8500"
   - "8600:53/udp"
-micro:
-  command: --registry_address=consul:8500 api --namespace=com.example.api
-  image: microhq/micro:latest
-  links:
-  - consul
-  - user_api
+
+jaeger:
+  image: jaegertracing/all-in-one:1.7
   ports:
-  - "8080:8080"
-user_api:
-  build: ./bin/user_api
+  - "5775:5775/udp"
+  - "6831:6831/udp"
+  - "6832:6832/udp"
+  - "5778:5778"
+  - "16686:16686"
+  - "14268:14268"
+  - "9411:9411"
+#micro:
+#  command: --registry_address=consul:8500 api --handler=http --namespace=com.example.api
+#  image: microhq/micro:latest
+#  links:
+#  - consul
+#  - api_common
+#  ports:
+#  - "8080:8080"
+api_common:
+  build: ./bin/api_common
+  environment:
+    CONFIGOR_TRACE_ADDRESS: jaeger:6831
+  command: --server_address=:8888 --registry_address=consul:8500
+  links:
+  - consul
+  - jaeger
+  - srv_user
+  ports:
+  - "8888:8888"
+srv_user:
+  build: ./bin/srv_user
+  environment:
+    CONFIGOR_TRACE_ADDRESS: jaeger:6831
   command: --registry_address=consul:8500
   links:
   - consul
-  - user_srv
-user_srv:
-  build: ./bin/user_srv
-  command: --registry_address=consul:8500
-  links:
-  - consul
+  - jaeger
 
 

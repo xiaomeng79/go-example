@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "username": "xiaomeng01",
+        "password": "123456",
+        "email": "123456@qq.com",
+        "description": "我是一个好人"
+    },
+    {
+        "id": 2,
+        "username": "xiaomeng02",
+        "password": "123456",
+        "email": "56789@qq.com",
+        "description": "我是一个好人02"
+    }
+]

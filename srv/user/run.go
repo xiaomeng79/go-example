@@ -1,4 +1,4 @@
-package srv
+package user
 
 import (
 	"github.com/micro/cli"
@@ -9,7 +9,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/xiaomeng79/go-example/cinit"
 	"github.com/xiaomeng79/go-example/internal/mywrapper"
-	pb "github.com/xiaomeng79/go-example/user/srv/proto"
+	pb "github.com/xiaomeng79/go-example/srv/user/proto"
 	"github.com/xiaomeng79/go-log"
 	"time"
 )
@@ -44,7 +44,10 @@ func Run() {
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			//注册服务
-			pb.RegisterUserHandler(service.Server(), &UserHandler{}, server.InternalHandler(true))
+			n, i := loadUserInfo("data/userinfo.json")
+			pb.RegisterUserServiceHandler(service.Server(), &UserHandler{
+				n, i,
+			}, server.InternalHandler(true))
 		}),
 		micro.AfterStop(func() error {
 			log.Info("停止服务")

@@ -27,10 +27,10 @@ func LogServerWrap(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
 		err := fn(ctx, req, rsp)
 		if err != nil {
-			log.Info("服务端错误记录:"+req.Service()+" 方法:"+req.Method()+err.Error(), ctx)
+			log.Info("错误记录,服务:"+req.Service()+" 方法:"+req.Method()+err.Error(), ctx)
 		}
-		log.Info("服务端记录:"+req.Service()+" 方法:"+req.Method()+"请求信息", ctx)
-		log.Info("服务端记录:"+req.Service()+" 方法:"+req.Method()+"响应信息", ctx)
+		log.Infof("请求信息:%+v\n", req, ctx)
+		log.Infof("响应信息:%+v\n", rsp, ctx)
 		return err
 	}
 }

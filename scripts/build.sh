@@ -15,7 +15,6 @@ build() {
 		for f in $dirname/$2.go; do \
 		    if [ -f $f ];then \
 		        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -i -o deployments/bin/$1_$2/$1_$2 -tags $1_$2 ./cmd/$1/
-		        cp scripts/run.sh deployments/bin/$1_$2
                 echo build over: $1_$2; \
             fi \
 		done \
@@ -24,11 +23,10 @@ build() {
 
 #全部build
 allbuild() {
-    build user api
-    build user srv
-    build account api
-    build account srv
-    build auth srv
+    build api common
+    build srv user
+    build srv account
+    build srv auth
 }
 #判断如何build
 case $1 in

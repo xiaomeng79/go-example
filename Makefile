@@ -1,6 +1,7 @@
 #定义变量
-project_name=user_srv
 
+#project:user account auth
+#type:api srv web
 
 .PHONY : fmt
 fmt :
@@ -17,19 +18,18 @@ test :
 	@go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 
-#project:user account auth
-#type:api srv web
+
 
 .PHONY : build
-build :
+build : proto dockerfile builddata
 	@echo "部分编译开始:"$(project)_$(type)
-	@chmod +x ./scripts/build.sh && ./scripts/build.sh build $(project) $(type)
+	@chmod +x ./scripts/build.sh && ./scripts/build.sh build $(type) $(project)
 	@echo "部分编译结束"
 
 
 
 .PHONY : allbuild
-allbuild :
+allbuild : proto alldockerfile  builddata
 
 	@echo "全部编译开始"
 	@chmod +x ./scripts/build.sh && ./scripts/build.sh allbuild
@@ -68,6 +68,12 @@ alldockerfile :
 compose :
 
 	@chmod +x ./scripts/docker-compose.sh && ./scripts/docker-compose.sh $(bin)
+
+
+.PHONY : builddata
+builddata :
+
+	@chmod +x ./scripts/builddata.sh && ./scripts/builddata.sh
 
 #编辑k8s配置
 .PHONY : k8sconfig

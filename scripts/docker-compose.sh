@@ -25,8 +25,7 @@ case $1 in
     rm) echo "docker-compose rm"
     cd deployments && sudo docker-compose rm
     ;;
-    *)
-    echo "docker-compose error"
-    exit 2
+    *) echo "docker-compose up"
+    cd deployments && sudo docker-compose up --build
     ;;
 esac

@@ -5,6 +5,14 @@ import (
 	"log"
 )
 
+const (
+	//上下文
+	TRACE_CONTEXT = "trace_ctx"     //trace
+	REQ_PARAM     = "req_param"     //请求参数绑定
+	JWT_NAME      = "Authorization" //JWT请求头名称
+	JWT_MSG       = "JWT-MSG"       //JWT自定义的消息
+)
+
 //公共配置
 var Config = struct {
 	Service struct {
