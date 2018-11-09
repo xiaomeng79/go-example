@@ -35,14 +35,14 @@ func JWT(next echo.HandlerFunc) echo.HandlerFunc {
 		jwtString := c.Request().Header.Get(cinit.JWT_NAME)
 		//log.Debug(jwtString, ctx)
 		//解析JWT
-		auths := strings.Split(jwtString," ")
+		auths := strings.Split(jwtString, " ")
 		if strings.ToUpper(auths[0]) != "BEARER" || auths[1] == " " {
-			return HandleError(c,ReqNoAllow,"token验证失败")
+			return HandleError(c, ReqNoAllow, "token验证失败")
 		}
-		jwtmsg, err := jwt.Decode(strings.Trim(auths[1]," "))
+		jwtmsg, err := jwt.Decode(strings.Trim(auths[1], " "))
 		if err != nil {
 			log.Info(err.Error(), ctx)
-			return HandleError(c,ReqNoAllow,"token验证失败")
+			return HandleError(c, ReqNoAllow, "token验证失败")
 		}
 		c.Set(cinit.JWT_MSG, jwtmsg)
 		return next(c)
@@ -62,13 +62,13 @@ func VerifyParam(next echo.HandlerFunc) echo.HandlerFunc {
 		err := c.Bind(r)
 		if err != nil {
 			log.Info("解析参数错误:"+err.Error(), ctx)
-			return HandleError(c,CommonParamConvertError)
+			return HandleError(c, CommonParamConvertError)
 		}
 		//验证公共参数
 		err = r.Validate()
 		if err != nil {
 			log.Info("验证参数错误:"+err.Error(), ctx)
-			return HandleError(c,CommonParamConvertError,err.Error())
+			return HandleError(c, CommonParamConvertError, err.Error())
 		}
 		//请求appsecret
 
@@ -76,7 +76,7 @@ func VerifyParam(next echo.HandlerFunc) echo.HandlerFunc {
 		b, err := r.CompareSign()
 		if !b {
 			log.Info("获取appsecret"+err.Error(), ctx)
-			return HandleError(c,CommonSignError)
+			return HandleError(c, CommonSignError)
 		}
 		//通过验证，绑定参数
 		c.Set(cinit.REQ_PARAM, r)
