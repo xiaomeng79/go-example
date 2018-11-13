@@ -15,7 +15,7 @@
 |配置|默认值->yaml->env|
 |日志|可选插件(zap logors),集成了链路跟踪[go-log](https://github.com/xiaomeng79/go-log)|
 |链路跟踪|OpenTracing [Jaeger](https://github.com/jaegertracing/jaeger)|
-|监控||
+|监控|[go-metrics](https://github.com/rcrowley/go-metrics)|
 |打包|[bindata](https://github.com/jteeuwen/go-bindata)|
 |编码|[protoc-gen-micro](https://github.com/micro/protoc-gen-micro)|
 |部署|docker docker-compose k8s|
@@ -57,6 +57,7 @@
 
 ## 编译
 ```go
+make vendor 
 make allbuild
 ```
 ## 本地docker-compose运行
@@ -75,3 +76,5 @@ curl -X POST   http://127.0.0.1:8888/common/v1/login   -H 'Cache-Controlapplicat
 ## 查看效果
 
 1. 链路跟踪:http://127.0.0.1:16686 [本地效果](http://127.0.0.1:16686)
+
+1. 监控:http://127.0.0.1:3000 [本地效果](http://127.0.0.1:3000) 用户名:admin 密码:admin

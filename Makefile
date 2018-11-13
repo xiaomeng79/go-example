@@ -8,16 +8,18 @@ fmt :
 	@echo "格式化代码"
 	@gofmt -l -w ./
 
-
+.PHONY : vendor
+vendor :
+	@echo "创建vendor"
+	@go mod vendor
+	@echo "结束vendor"
 
 .PHONY : test
 test :
 	@echo "检查代码"
 	@go vet  ./...
 	@echo "测试代码"
-	@go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-
-
+	@go test -mod=vendor -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 
 .PHONY : build

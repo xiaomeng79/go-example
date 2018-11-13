@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/middleware"
 	"github.com/micro/go-web"
 	"github.com/xiaomeng79/go-example/cinit"
+	"github.com/xiaomeng79/go-example/internal/metrics"
 	"github.com/xiaomeng79/go-log"
 	"net/http"
 	"time"
@@ -27,7 +28,6 @@ func Run() {
 		web.RegisterTTL(time.Second*30),
 		web.RegisterInterval(time.Second*15),
 	)
-
 	log.Info("创建服务:名称:" + serviceName + ",版本:" + serviceVersion)
 	// 定义Service动作操作
 	service.Init()
@@ -52,6 +52,36 @@ func Run() {
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
 	}))
 	e.Use(Opentracing)
+
+	//metrics
+	// Metrics
+	if cinit.Config.Metrics.Enable == "yes" {
+
+		/* Pull模式
+		e.Use(prometheus.MetricsFunc(
+			prometheus.Namespace("common_api"),
+		))
+		*/
+
+		// Push模式
+		m := metrics.NewMetrics()
+		e.Use(MetricsFunc(m))
+		m.MemStats()
+		// InfluxDB
+		m.InfluxDBWithTags(
+			time.Duration(cinit.Config.Metrics.Duration)*time.Second,
+			cinit.Config.Metrics.Url,
+			cinit.Config.Metrics.Database,
+			cinit.Config.Metrics.UserName,
+			cinit.Config.Metrics.Password,
+			map[string]string{"service": serviceName},
+		)
+
+		// Graphite
+		//addr, _ := net.ResolveTCPAddr("tcp", Conf.Metrics.Address)
+		//m.Graphite(Conf.Metrics.FreqSec*time.Second, "echo-web.node."+hostname, addr)
+
+	}
 
 	//加验证JWT路由组，版本v1
 	g1 := e.Group("/common/v1", JWT)

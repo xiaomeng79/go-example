@@ -3,11 +3,15 @@ package common
 import (
 	"context"
 	"github.com/labstack/echo"
+	"github.com/rcrowley/go-metrics"
 	"github.com/xiaomeng79/go-example/cinit"
 	"github.com/xiaomeng79/go-example/internal/jwt"
+	metrics2 "github.com/xiaomeng79/go-example/internal/metrics"
 	"github.com/xiaomeng79/go-example/internal/trace"
 	"github.com/xiaomeng79/go-log"
+	"strconv"
 	"strings"
+	"time"
 )
 
 //opentracing中间件
@@ -81,5 +85,40 @@ func VerifyParam(next echo.HandlerFunc) echo.HandlerFunc {
 		//通过验证，绑定参数
 		c.Set(cinit.REQ_PARAM, r)
 		return next(c)
+	}
+}
+
+//metrics
+func MetricsFunc(m *metrics2.Metrics) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			res := c.Response()
+			start := time.Now()
+			if err := next(c); err != nil {
+				c.Error(err)
+			}
+			stop := time.Now()
+
+			latency := stop.Sub(start)
+			status := res.Status
+			//Total request count.
+			meter := metrics.GetOrRegisterMeter("status."+strconv.Itoa(status), m.GetRegistry())
+			meter.Mark(1)
+
+			//Request size in bytes.
+			//meter = metrics.GetOrRegisterMeter(m.WithPrefix("status."+strconv.Itoa(status)), m.GetRegistry())
+			//meter.Mark(req.ContentLength)
+
+			//Request duration in nanoseconds.
+			h := metrics.GetOrRegisterHistogram("h_status."+strconv.Itoa(status), m.GetRegistry(),
+				metrics.NewExpDecaySample(1028, 0.015))
+			h.Update(latency.Nanoseconds())
+
+			//Response size in bytes.
+			//meter = metrics.GetOrRegisterMeter(m.WithPrefix("status."+strconv.Itoa(status)), m.GetRegistry())
+			//meter.Mark(res.Size)
+
+			return nil
+		}
 	}
 }

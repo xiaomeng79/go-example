@@ -1,11 +1,11 @@
 consul:
-  command: -server -bootstrap -rejoin
-  image: progrium/consul:latest
+#  command: -server -bootstrap -rejoin
+  image: consul:latest
   ports:
-  - "8300:8300"
-  - "8400:8400"
+#  - "8300:8300"
+#  - "8400:8400"
   - "8500:8500"
-  - "8600:53/udp"
+#  - "8600:53/udp"
 
 jaeger:
   image: jaegertracing/all-in-one:1.7
@@ -17,6 +17,11 @@ jaeger:
   - "16686:16686"
   - "14268:14268"
   - "9411:9411"
+
+grafana:
+  image: grafana/grafana:latest
+  ports:
+  - "3000:3000"
 #micro:
 #  command: --registry_address=consul:8500 api --handler=http --namespace=com.example.api
 #  image: microhq/micro:latest
@@ -25,14 +30,22 @@ jaeger:
 #  - api_common
 #  ports:
 #  - "8080:8080"
+influxdb:
+  image: influxdb:1.5-alpine
+  ports:
+  - "8086:8086"
 api_common:
   build: ./bin/api_common
   environment:
     CONFIGOR_TRACE_ADDRESS: jaeger:6831
+    CONFIGOR_METRICS_DATABASE: test3
+    CONFIGOR_METRICS_URL: http://influxdb:8086
   command: --server_address=:8888 --registry_address=consul:8500
   links:
   - consul
   - jaeger
+  - influxdb
+  - grafana
   - srv_user
   ports:
   - "8888:8888"

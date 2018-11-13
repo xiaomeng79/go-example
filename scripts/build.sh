@@ -14,7 +14,7 @@ build() {
     if [ -d $dirname ];then
 		for f in $dirname/$2.go; do \
 		    if [ -f $f ];then \
-		        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -i -o deployments/bin/$1_$2/$1_$2 -tags $1_$2 ./cmd/$1/
+		        CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -ldflags '-w' -i -o deployments/bin/$1_$2/$1_$2 -tags $1_$2 ./cmd/$1/
                 echo build over: $1_$2; \
             fi \
 		done \
