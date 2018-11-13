@@ -70,7 +70,7 @@ make compose
 
 ```go
 //登录,返回token在响应头中:Authorization
-curl -X POST   http://127.0.0.1:8888/common/v1/login   -H 'Cache-Controlapplication/json'    -d '{"username":"xiaomeng01","password":"123456"}' -i   
+curl -X POST http://127.0.0.1:8888/common/v1/login -H 'Content-Type: application/json' -d '{"username":"xiaomeng01","password":"123456"}' -i  
 ```
 
 ## 查看效果
