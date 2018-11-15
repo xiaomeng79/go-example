@@ -11,6 +11,7 @@
 
 |功能|描述|
 |---|---|
+|网关| [traefik](https://github.com/containous/traefik) [kong](https://github.com/Kong/kong) 可以使用插件实现限流,断路器,重试,认证,统计等|
 |框架|go-micro(微服务) + echo(web框架)|
 |配置|默认值->yaml->env|
 |日志|可选插件(zap logors),集成了链路跟踪[go-log](https://github.com/xiaomeng79/go-log)|
